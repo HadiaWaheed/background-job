@@ -48,8 +48,10 @@ background-job/
 │
 ├── app.py
 ├── README.md
-└── .gitignore
-````
+├── .gitignore
+├── inngest.png
+└── run.png
+```
 
 ---
 
@@ -57,7 +59,7 @@ background-job/
 
 ### 1. Start the FastAPI API
 
-Open the first terminal:
+Open the first terminal inside the project folder:
 
 ```powershell
 $env:INNGEST_DEV="1"
@@ -70,7 +72,9 @@ The API runs at:
 http://localhost:8000
 ```
 
-Health check:
+### Health Check
+
+Open:
 
 ```text
 http://localhost:8000/health
@@ -88,7 +92,7 @@ Expected response:
 
 ### 2. Start the Inngest Dev Server
 
-Open a second terminal:
+Open a second terminal inside the same project folder:
 
 ```powershell
 npx.cmd inngest-cli@latest dev -u http://localhost:8000/api/inngest
@@ -100,27 +104,27 @@ Open the Inngest dashboard:
 http://localhost:8288
 ```
 
-The dashboard allows you to see functions, runs, steps, retries, and cron executions.
+The dashboard allows you to see functions, runs, steps, retries, failures, and cron executions.
 
 ---
 
 ## API Endpoints
 
-| Method | Endpoint               | Description             | Expected Response |
-| ------ | ---------------------- | ----------------------- | ----------------- |
-| GET    | `/health`              | Check if API is running | `200`             |
-| POST   | `/reports`             | Create a new report     | `202`             |
-| GET    | `/reports/{report_id}` | Check report status     | `200` / `404`     |
+| Method | Endpoint | Description | Expected Response |
+|---|---|---|---|
+| GET | `/health` | Check if API is running | `200` |
+| POST | `/reports` | Create a new report | `202` |
+| GET | `/reports/{report_id}` | Check report status | `200` / `404` |
 
 ---
 
 ## Inngest Functions
 
-| Function      | Trigger            | Purpose                                                  |
-| ------------- | ------------------ | -------------------------------------------------------- |
-| `say-hello`   | `test/hello`       | Demonstrates a background function with a 5-second sleep |
-| `make-report` | `report/requested` | Generates the report in the background                   |
-| `heartbeat`   | `* * * * *`        | Runs every minute and counts report statuses             |
+| Function | Trigger | Purpose |
+|---|---|---|
+| `say-hello` | `test/hello` | Demonstrates a background function with a 5-second sleep |
+| `make-report` | `report/requested` | Generates the report in the background |
+| `heartbeat` | `* * * * *` | Runs every minute and counts report statuses |
 
 ---
 
@@ -196,34 +200,34 @@ An unknown report ID returns:
 
 ---
 
-## 202 Proof
+## 202 Accepted Proof
 
-Example POST response:
+The API accepts a report request immediately with `202 Accepted`.
+
+Example response:
 
 ```json
 {
-  "id": "4fb484eb-d9cd-4561-b62d-61d4f56e43d4",
+  "id": "REPORT_ID",
   "status": "pending"
 }
 ```
 
-The API responds immediately with `202 Accepted`.
-
-First poll:
+The report initially has a pending status:
 
 ```json
 {
-  "id": "4fb484eb-d9cd-4561-b62d-61d4f56e43d4",
+  "id": "REPORT_ID",
   "topic": "cats",
   "status": "pending"
 }
 ```
 
-Later poll:
+After the background job completes:
 
 ```json
 {
-  "id": "4fb484eb-d9cd-4561-b62d-61d4f56e43d4",
+  "id": "REPORT_ID",
   "topic": "cats",
   "status": "done",
   "result": "Report generated for topic: cats"
@@ -280,9 +284,9 @@ which means it runs every minute.
 
 The function counts:
 
-* Pending reports
-* Completed reports
-* Failed reports
+- Pending reports
+- Completed reports
+- Failed reports
 
 Example log:
 
@@ -308,7 +312,7 @@ Every Sunday at 22:00:
 
 ## Background Job Steps
 
-The `make-report` function uses two steps:
+The `make-report` function uses two steps.
 
 ### Step 1 — Slow Work
 
@@ -330,7 +334,7 @@ This keeps the API request fast while the slow work happens in the background.
 
 ---
 
-## Inngest Dashboard
+# Inngest Dashboard
 
 The Inngest Dev Server dashboard can be opened at:
 
@@ -340,18 +344,24 @@ http://localhost:8288
 
 It shows:
 
-* `say-hello`
-* `make-report`
-* `heartbeat`
-* Completed runs
-* Failed runs
-* Retry attempts
-* Individual steps
-* Cron executions
+- `say-hello`
+- `make-report`
+- `heartbeat`
+- Completed runs
+- Failed runs
+- Retry attempts
+- Individual steps
+- Cron executions
 
 ### Dashboard Screenshot
 
+![Inngest Dashboard](inngest.png)
 
+### Inngest Run Screenshot
+
+![Inngest Run](run.png)
+
+---
 
 ## Key Concepts Learned
 
@@ -383,21 +393,44 @@ A tool used in this project to run background functions, retries, and scheduled 
 
 ## Git Commits
 
-The project was developed stage by stage with meaningful Git commits:
+The project was developed stage by stage with meaningful Git commits.
 
 ```text
 Stage 0: hello server
+
 Stage 1: add Inngest hello function
+
 Stage 2: 202 + background job + status endpoint
+
 Stage 3: retries seen, bad input rejected
+
 Stage 4: add heartbeat cron job
+
 Stage 5: add gitignore
 ```
 
 ---
 
+## Conclusion
+
+This project demonstrates how a backend API can accept a request quickly while moving slow work into a background job.
+
+The project includes:
+
+- FastAPI API
+- `202 Accepted` responses
+- Background report generation
+- Status polling
+- Inngest events
+- Multiple job steps
+- Automatic retries
+- Input validation
+- Cron scheduling
+- Inngest dashboard
+- Git and GitHub version control
+
+---
+
 ## Author
 
-Built as a backend background-job assignment using Python, FastAPI, and Inngest.
-
-````
+Built using Python, FastAPI, and Inngest as a background-job assignment.
