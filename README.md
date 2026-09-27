@@ -433,7 +433,12 @@ The project includes:
 
 ## Author
 
-Built using Python, FastAPI, and Inngest as a background-job assignment.
+**Hadia Waheed**
+
+- GitHub: [@HadiaWaheed](https://github.com/HadiaWaheed)
+- LinkedIn: [Hadia Waheed](https://www.linkedin.com/in/hadia-waheed-1647892aa/)
+
+AI/ML enthusiast building practical AI applications and automation solutions.Built using Python, FastAPI, and Inngest as a background-job assignment.
 
 ---
 
