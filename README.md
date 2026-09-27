@@ -434,3 +434,9 @@ The project includes:
 ## Author
 
 Built using Python, FastAPI, and Inngest as a background-job assignment.
+
+---
+
+## Stage 5 Verification
+
+The project was tested locally with FastAPI and the Inngest Dev Server. The repository includes the API implementation, background-job functions, retry handling, cron heartbeat, README documentation, and Inngest dashboard screenshots.
